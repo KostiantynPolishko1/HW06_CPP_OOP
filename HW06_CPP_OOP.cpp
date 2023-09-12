@@ -5,9 +5,8 @@ using std::cout;
 using std::cin;
 using std::string;
 
-void printMenu(string* const arr, const short& indMenu, const short& size);
-
-short indexMenu(short& indMenu, const short& size);
+const short	MIN_SIZE = 2;
+const short	MAX_SIZE = 10;
 
 enum Rotation {
     ROTATE0,
@@ -18,6 +17,24 @@ enum Rotation {
     EXIT
 };
 
+int inputValue(int a);
+short inputSize(std::string text);
+
+void printMenu(string* const arr, const short& indMenu, const short& size);
+short indexMenu(short& indMenu, const short& size);
+
+void matrixRotation(const Rotation &Rotate);
+
+
+int** createMatrix(const short& row, const short& col) {
+
+    int** arr = new int* [row];
+    for (short i = 0; i < row; i++)
+        *(arr + i) = new int[col];
+
+    return arr;
+}
+
 int main(void)
 {
     cout << "\nStart!\n";
@@ -25,6 +42,13 @@ int main(void)
     short indMenu = 0;
     short exit = 0;
     string arrMenu[]{ "ROTATE 0", "ROTATE 90" , "ROTATE 180" , "ROTATE 270" , "ROTATE 360", "EXIT" };
+
+    short sizeRow = 0, sizeCol = 0;
+
+    sizeRow = inputSize("rows");
+    sizeCol = inputSize("columns");
+
+    int** matrixR0 = createMatrix(sizeRow, sizeCol);
 
     do {
         printMenu(arrMenu, indMenu, EXIT);
@@ -34,37 +58,56 @@ int main(void)
 
     Rotation rotation = static_cast<Rotation>(indMenu);
 
-    switch (rotation)
-    {
-    case ROTATE0:
-        cout << "\nrotation 0\n";
-        break;
-    case ROTATE90:
-        cout << "\nrotation 90\n";
-        break;
-    case ROTATE180:
-        cout << "\nrotation 180\n";
-        break;
-    case ROTATE270:
-        cout << "\nrotation 270\n";
-        break;
-    case ROTATE360:
-        cout << "\nrotation 360\n";
-        break;
-    case EXIT:
-        cout << "\nexit\n";
-        break;
-    }
+    matrixRotation(rotation);
 
     return 0;
 }
+
+//======================functions======================
+
+int inputValue(int a)
+{
+    while (true)
+    {
+        cout << "\tenter -> ";
+        cin >> a;
+        if (cin.peek() != '\n')
+        {
+            cout << "\t\tINPUT ERROR!\n";
+            cin.clear();
+            cin.ignore(32767, '\n');
+            continue;
+        }
+
+        cin.ignore(32767, '\n');
+        system("CLS");
+
+        return abs(a);
+    }
+}
+
+short inputSize(std::string text) {
+
+    while (true)
+    {
+        short size = 0;
+
+        cout << "\n\tnumber of " + text + " (" << MIN_SIZE << "..." << MAX_SIZE << ")\n";
+        size = inputValue(size);
+        if (size <= MAX_SIZE && size >= MIN_SIZE)
+            return size;
+
+        system("CLS");
+        cout << "\tOUT of RANGE. ERROR!\n";
+    };
+};
 
 void printMenu(string* const arr, const short& indMenu, const short& size) {
 
     cout << "\n Menu:\n";
     for (short i = 0; i <= size; i++) {
         if (indMenu == i) {
-            cout << " w|s" << *(arr + i) << "\n";
+            cout << " -> " << *(arr + i) << "\n";
             continue;
         }
         cout << "    " << *(arr + i) << "\n";
@@ -76,7 +119,7 @@ short indexMenu(short& indMenu, const short& size) {
     short indMin = 0;
     char direct = ' ';
 
-    cout << " -> ";
+    cout << " w|s ";
     direct = cin.get();
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -103,5 +146,30 @@ short indexMenu(short& indMenu, const short& size) {
             indMenu = indMin;
 
         return indMenu;
+    }
+};
+
+void matrixRotation(const Rotation &Rotate) {
+    
+    switch (Rotate)
+    {
+    case ROTATE0:
+        cout << "\nrotation 0\n";
+        break;
+    case ROTATE90:
+        cout << "\nrotation 90\n";
+        break;
+    case ROTATE180:
+        cout << "\nrotation 180\n";
+        break;
+    case ROTATE270:
+        cout << "\nrotation 270\n";
+        break;
+    case ROTATE360:
+        cout << "\nrotation 360\n";
+        break;
+    case EXIT:
+        cout << "\nexit\n";
+        break;
     }
 };
