@@ -44,9 +44,10 @@ int main(void)
 
     int** arrMatrix = createMatrix(sizeRow, sizeCol);
     fillMatrix(arrMatrix, sizeRow, sizeCol);
-    printMatrix(arrMatrix, sizeRow, sizeCol, "0");
 
     do {
+        printMatrix(arrMatrix, sizeRow, sizeCol, "0");
+
         printMenu(arrMenu, indMenu, EXIT);
         exit = indexMenu(indMenu, EXIT);
 
