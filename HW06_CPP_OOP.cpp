@@ -1,5 +1,4 @@
 #include <iostream>
-#include <ctime>
 
 using std::cout;
 using std::cin;
@@ -25,15 +24,10 @@ short indexMenu(short& indMenu, const short& size);
 
 void matrixRotation(const Rotation &Rotate);
 
-
-int** createMatrix(const short& row, const short& col) {
-
-    int** arr = new int* [row];
-    for (short i = 0; i < row; i++)
-        *(arr + i) = new int[col];
-
-    return arr;
-}
+int** createMatrix(const short& row, const short& col);
+void fillMatrix(int** const arr, const short& row, const short& col);
+void printMatrix(int** const arr, const short& row, const short& col, const std::string rotation);
+void clearMatrix(int** arr, const short& row);
 
 int main(void)
 {
@@ -41,14 +35,16 @@ int main(void)
 
     short indMenu = 0;
     short exit = 0;
-    string arrMenu[]{ "ROTATE 0", "ROTATE 90" , "ROTATE 180" , "ROTATE 270" , "ROTATE 360", "EXIT" };
-
     short sizeRow = 0, sizeCol = 0;
+
+    string arrMenu[]{ "ROTATE 0", "ROTATE 90" , "ROTATE 180" , "ROTATE 270" , "ROTATE 360", "EXIT" };
 
     sizeRow = inputSize("rows");
     sizeCol = inputSize("columns");
 
-    int** matrixR0 = createMatrix(sizeRow, sizeCol);
+    int** arrMatrix = createMatrix(sizeRow, sizeCol);
+    fillMatrix(arrMatrix, sizeRow, sizeCol);
+    printMatrix(arrMatrix, sizeRow, sizeCol, "0");
 
     do {
         printMenu(arrMenu, indMenu, EXIT);
@@ -59,10 +55,11 @@ int main(void)
     Rotation rotation = static_cast<Rotation>(indMenu);
 
     matrixRotation(rotation);
+    clearMatrix(arrMatrix, sizeRow);
 
     return 0;
 }
-
+;
 //======================functions======================
 
 int inputValue(int a)
@@ -85,7 +82,7 @@ int inputValue(int a)
         return abs(a);
     }
 }
-
+;
 short inputSize(std::string text) {
 
     while (true)
@@ -100,20 +97,47 @@ short inputSize(std::string text) {
         system("CLS");
         cout << "\tOUT of RANGE. ERROR!\n";
     };
-};
+}
+;
+int** createMatrix(const short& row, const short& col) {
 
-void printMenu(string* const arr, const short& indMenu, const short& size) {
+    int** arr = new int* [row];
+    for (short i = 0; i < row; i++)
+        *(arr + i) = new int[col];
 
-    cout << "\n Menu:\n";
-    for (short i = 0; i <= size; i++) {
-        if (indMenu == i) {
-            cout << " -> " << *(arr + i) << "\n";
-            continue;
-        }
-        cout << "    " << *(arr + i) << "\n";
+    return arr;
+}
+;
+void fillMatrix(int** const arr, const short& row, const short& col) {
+
+    int count = 0;
+    for (int** iter = arr; iter != arr + row; iter++)
+        for (int* jter = *iter; jter != *iter + col; jter++)
+            *jter = ++count;
+}
+;
+void printMatrix(int** const arr, const short& row, const short& col, const std::string rotation) {
+
+    cout << "\n\tmatrix " << row << " x " << col << ", rotation " + rotation + " clockwise\n\n";
+
+    for (int** iter = arr; iter != arr + row; iter++) {
+        cout << "\t";
+        for (int* jter = *iter; jter != *iter + col; jter++)
+            cout << *jter << " ";
+        cout << "\n";
     }
-};
+}
+;
+void clearMatrix(int** arr, const short& row) {
 
+    for (int** iter = arr; iter != arr + row; iter++) {
+        delete[] * iter;
+        *iter = nullptr;
+    }
+    delete[] arr;
+    arr = nullptr;
+}
+;
 short indexMenu(short& indMenu, const short& size) {
 
     short indMin = 0;
@@ -147,8 +171,20 @@ short indexMenu(short& indMenu, const short& size) {
 
         return indMenu;
     }
-};
+}
+;
+void printMenu(string* const arr, const short& indMenu, const short& size) {
 
+    cout << "\n Menu:\n";
+    for (short i = 0; i <= size; i++) {
+        if (indMenu == i) {
+            cout << " -> " << *(arr + i) << "\n";
+            continue;
+        }
+        cout << "    " << *(arr + i) << "\n";
+    }
+}
+;
 void matrixRotation(const Rotation &Rotate) {
     
     switch (Rotate)
@@ -172,4 +208,5 @@ void matrixRotation(const Rotation &Rotate) {
         cout << "\nexit\n";
         break;
     }
-};
+}
+;
