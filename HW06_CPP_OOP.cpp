@@ -64,18 +64,30 @@ int main(void)
 
     } while (static_cast<char>(exit) != '\n');
 
-    //menu of direction (clockwise or counterclockwise)
-    do {
-        printMatrix(arrMatrix, sizeRow, sizeCol, " ");
-        printMenu(arrDirect, indDirect, OUT);
-
-        exit = indexMenu(indDirect, OUT);
-
-    } while (static_cast<char>(exit) != '\n');
-
     printMatrix(arrMatrix, sizeRow, sizeCol, " ");
 
     Rotation rotation = static_cast<Rotation>(indMenu);
+
+    switch (rotation)
+    {
+    case ROTATE0:
+    case ROTATE360:
+        printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+        return 0;
+    case ROTATE90:
+    case ROTATE270:
+        //menu of direction (clockwise or counterclockwise)
+        do {
+            printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+            printMenu(arrDirect, indDirect, OUT);
+
+            exit = indexMenu(indDirect, OUT);
+
+        } while (static_cast<char>(exit) != '\n');
+
+        printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+    }
+
     Direction direct = static_cast<Direction>(indDirect);
 
     matrixRotation(rotation, direct, arrMatrix, sizeRow, sizeCol);
@@ -167,11 +179,6 @@ void rotateMatrix(int** const arr, short row, short col, const Rotation& Rotate)
 
     switch (Rotate) 
     {
-    case ROTATE0:
-    case ROTATE360:
-        printMatrix(arr, row, col, " ");
-        exit(0);
-
     case ROTATE90:
     case ROTATE270:
         std::swap(row, col);
