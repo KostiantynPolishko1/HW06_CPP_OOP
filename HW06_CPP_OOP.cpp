@@ -22,12 +22,14 @@ short inputSize(std::string text);
 void printMenu(string* const arr, const short& indMenu, const short& size);
 short indexMenu(short& indMenu, const short& size);
 
-void matrixRotation(const Rotation &Rotate);
-
 int** createMatrix(const short& row, const short& col);
 void fillMatrix(int** const arr, const short& row, const short& col);
 void printMatrix(int** const arr, const short& row, const short& col, const std::string rotation);
 void clearMatrix(int** arr, const short& row);
+
+void rotateMatrix(int** const arr, short row, short col, const Rotation& Rotate);
+
+void matrixRotation(const Rotation &Rotate, int** const arr, const short &row, const short &col);
 
 int main(void)
 {
@@ -44,18 +46,25 @@ int main(void)
 
     int** arrMatrix = createMatrix(sizeRow, sizeCol);
     fillMatrix(arrMatrix, sizeRow, sizeCol);
+    printMatrix(arrMatrix, sizeRow, sizeCol, "0");
 
     do {
+<<<<<<< HEAD
         printMatrix(arrMatrix, sizeRow, sizeCol, "0");
-
+=======
+>>>>>>> parent of 926b7fa (4 Function 'printMarix' moved inside cycles do-while inside of main functions.)
         printMenu(arrMenu, indMenu, EXIT);
+
         exit = indexMenu(indMenu, EXIT);
 
     } while (static_cast<char>(exit) != '\n');
 
+    printMatrix(arrMatrix, sizeRow, sizeCol, "0");
+    printMenu(arrMenu, indMenu, EXIT);
+
     Rotation rotation = static_cast<Rotation>(indMenu);
 
-    matrixRotation(rotation);
+    matrixRotation(rotation, arrMatrix, sizeRow, sizeCol);
     clearMatrix(arrMatrix, sizeRow);
 
     return 0;
@@ -139,6 +148,44 @@ void clearMatrix(int** arr, const short& row) {
     arr = nullptr;
 }
 ;
+void rotateMatrix(int** const arr, short row, short col, const Rotation& Rotate) {
+
+    switch (Rotate) 
+    {
+    case ROTATE0:
+    case ROTATE360:
+        printMatrix(arr, row, col, " ");
+        exit(0);
+
+    case ROTATE90:
+    case ROTATE270:
+        std::swap(row, col);
+        break;
+    }
+
+    int** matrixR = createMatrix(row, col);
+
+    for (int** iterR = matrixR, **iter0 = arr, i = 0; iterR != matrixR + row; iterR++, i++)
+    {
+        for (int* jterR = *iterR, *jter0 = *iter0, j = 0; jterR != *iterR + col; jterR++, j++) {
+            switch (Rotate) {
+            case ROTATE90:
+                *jterR = *(*(arr + ((col - 1) - j)) + i);
+                break;
+            case ROTATE180:
+                *jterR = *(*(arr + ((row - 1) - i)) + ((col - 1) - j));
+                break;
+             case ROTATE270:
+                 *jterR = *(*(arr + j) + ((row - 1) - i));
+                break;
+             }
+        }
+    }
+
+    printMatrix(matrixR, row, col, " ");
+    clearMatrix(matrixR, row);
+}
+;
 short indexMenu(short& indMenu, const short& size) {
 
     short indMin = 0;
@@ -186,24 +233,22 @@ void printMenu(string* const arr, const short& indMenu, const short& size) {
     }
 }
 ;
-void matrixRotation(const Rotation &Rotate) {
+void matrixRotation(const Rotation &Rotate, int** const arr, const short &row, const short &col) {
     
     switch (Rotate)
     {
     case ROTATE0:
-        cout << "\nrotation 0\n";
+    case ROTATE360:
+        rotateMatrix(arr, row, col, ROTATE0);
         break;
     case ROTATE90:
-        cout << "\nrotation 90\n";
+        rotateMatrix(arr, row, col, ROTATE90);
         break;
     case ROTATE180:
-        cout << "\nrotation 180\n";
+        rotateMatrix(arr, row, col, ROTATE180);
         break;
     case ROTATE270:
-        cout << "\nrotation 270\n";
-        break;
-    case ROTATE360:
-        cout << "\nrotation 360\n";
+        rotateMatrix(arr, row, col, ROTATE270);
         break;
     case EXIT:
         cout << "\nexit\n";
