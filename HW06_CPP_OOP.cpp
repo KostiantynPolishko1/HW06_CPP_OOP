@@ -22,7 +22,7 @@ enum Direction {
     OUT
 };
 
-int inputValue(int a);
+int inputValidValue(int a);
 short inputSize(std::string text);
 
 void printMenu(string* const arr, const short& indMenu, const short& size);
@@ -57,6 +57,7 @@ int main(void)
 
     //menu of rotation (0, 90, 180, 270, 360)
     do {
+
         printMatrix(arrMatrix, sizeRow, sizeCol, " ");
         printMenu(arrMenu, indMenu, EXIT);
 
@@ -76,16 +77,16 @@ int main(void)
         return 0;
     case ROTATE90:
     case ROTATE270:
+
         //menu of direction (clockwise or counterclockwise)
         do {
-            printMatrix(arrMatrix, sizeRow, sizeCol, " ");
             printMenu(arrDirect, indDirect, OUT);
-
             exit = indexMenu(indDirect, OUT);
+            printMatrix(arrMatrix, sizeRow, sizeCol, " ");
 
         } while (static_cast<char>(exit) != '\n');
 
-        printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+        //printMatrix(arrMatrix, sizeRow, sizeCol, " ");
     }
 
     Direction direct = static_cast<Direction>(indDirect);
@@ -99,7 +100,7 @@ int main(void)
 
 //======================functions======================
 
-int inputValue(int a)
+int inputValidValue(int a)
 {
     while (true)
     {
@@ -122,18 +123,16 @@ int inputValue(int a)
 ;
 short inputSize(std::string text) {
 
-    while (true)
-    {
-        short size = 0;
+    short size = 0;
 
+    do{
         cout << "\n\tnumber of " + text + " (" << MIN_SIZE << "..." << MAX_SIZE << ")\n";
-        size = inputValue(size);
-        if (size <= MAX_SIZE && size >= MIN_SIZE)
-            return size;
-
+        size = inputValidValue(size);
         system("CLS");
-        cout << "\tOUT of RANGE. ERROR!\n";
-    };
+
+    }while (size < MIN_SIZE || size > MAX_SIZE);
+
+    return size;
 }
 ;
 int** createMatrix(const short& row, const short& col) {
