@@ -30,7 +30,7 @@ short indexMenu(short& indMenu, const short& size);
 
 int** createMatrix(const short& row, const short& col);
 void fillMatrix(int** const arr, const short& row, const short& col);
-void printMatrix(int** const arr, const short& row, const short& col, const std::string rotation);
+void printMatrix(int** const arr, const short& row, const short& col, const std::string delim = " ");
 void clearMatrix(int** arr, const short& row);
 
 void rotateMatrix(int** const arr, short row, short col, const Rotation& Rotate);
@@ -58,14 +58,14 @@ int main(void)
     //menu of rotation (0, 90, 180, 270, 360)
     do {
 
-        printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+        printMatrix(arrMatrix, sizeRow, sizeCol);
         printMenu(arrMenu, indMenu, EXIT);
 
         exit = indexMenu(indMenu, EXIT);
 
     } while (static_cast<char>(exit) != '\n');
 
-    printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+    printMatrix(arrMatrix, sizeRow, sizeCol);
 
     Rotation rotation = static_cast<Rotation>(indMenu);
 
@@ -73,7 +73,7 @@ int main(void)
     {
     case ROTATE0:
     case ROTATE360:
-        printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+        printMatrix(arrMatrix, sizeRow, sizeCol);
         return 0;
     case ROTATE90:
     case ROTATE270:
@@ -82,11 +82,9 @@ int main(void)
         do {
             printMenu(arrDirect, indDirect, OUT);
             exit = indexMenu(indDirect, OUT);
-            printMatrix(arrMatrix, sizeRow, sizeCol, " ");
+            printMatrix(arrMatrix, sizeRow, sizeCol);
 
         } while (static_cast<char>(exit) != '\n');
-
-        //printMatrix(arrMatrix, sizeRow, sizeCol, " ");
     }
 
     Direction direct = static_cast<Direction>(indDirect);
@@ -152,14 +150,14 @@ void fillMatrix(int** const arr, const short& row, const short& col) {
             *jter = ++count;
 }
 ;
-void printMatrix(int** const arr, const short& row, const short& col, const std::string rotation) {
+void printMatrix(int** const arr, const short& row, const short& col, const std::string delim) {
 
     cout << "\n\tmatrix " << row << " x " << col << "\n\n";
 
     for (int** iter = arr; iter != arr + row; iter++) {
         cout << "\t";
         for (int* jter = *iter; jter != *iter + col; jter++)
-            cout << *jter << ( *jter < 10 ? "  " : " ");
+            cout << *jter << ( *jter < 10 ? "  " : delim);
         cout << "\n";
     }
 }
@@ -203,7 +201,7 @@ void rotateMatrix(int** const arr, short row, short col, const Rotation& Rotate)
         }
     }
 
-    printMatrix(matrixR, row, col, " ");
+    printMatrix(matrixR, row, col);
     clearMatrix(matrixR, row);
 }
 ;
